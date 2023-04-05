@@ -195,6 +195,7 @@ pyrightconfig.json
 ### Terraform ###
 # Local .terraform directories
 **/.terraform/*
+.terraform.*
 
 # .tfstate files
 *.tfstate
@@ -227,5 +228,8 @@ override.tf.json
 # Ignore CLI configuration files
 .terraformrc
 terraform.rc
+
+# ignore zip files
+*.zip
 
 # End of https://www.toptal.com/developers/gitignore/api/linux,localstack,python,terraform
