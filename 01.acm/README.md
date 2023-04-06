@@ -3,7 +3,6 @@
 ## 1. Request a certificate
 
 ```sh
-```sh
 # Request a certificate
 awslocal acm request-certificate \
         --domain-name www.example.com \
