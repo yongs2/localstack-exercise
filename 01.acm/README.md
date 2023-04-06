@@ -1,5 +1,7 @@
 # [AWS Certificate Manager (ACM)](https://docs.localstack.cloud/user-guide/aws/acm/)
 
+See [AWS Certificate Manager](https://docs.aws.amazon.com/acm/latest/userguide/acm-overview.html)
+
 ## 1. Request a certificate
 
 ```sh
