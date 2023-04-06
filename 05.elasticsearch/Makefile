@@ -24,4 +24,4 @@ list:		## list all domains
 clean:	 	## delete the domain
 	awslocal es delete-elasticsearch-domain --domain-name my-domain
 	
-.PHONY: usage install create get interact list query clean
+.PHONY: usage install create get interact list clean

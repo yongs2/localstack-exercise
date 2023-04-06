@@ -42,4 +42,4 @@ clean: key	 	## delete the domain
 	awslocal iam delete-user --user-name test
 	awslocal sts get-caller-identity
 	
-.PHONY: usage install create key policy list list clean
+.PHONY: usage install create key policy list get clean
