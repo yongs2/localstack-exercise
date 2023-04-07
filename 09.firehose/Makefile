@@ -2,8 +2,6 @@ export AWS_ACCESS_KEY_ID ?= test
 export AWS_SECRET_ACCESS_KEY ?= test
 export AWS_DEFAULT_REGION = us-east-1
 
-RESULT_DATA=/tmp/my_encrypted_data
-
 usage:		## Show this help
 	@fgrep -h "##" $(MAKEFILE_LIST) | fgrep -v fgrep | sed -e 's/\\$$//' | sed -e 's/##//'
 
@@ -11,15 +9,15 @@ install:	## Install dependencies
 	@which awslocal || pip install awscli-local
 
 create:		## Creating an Kinesis Data Firehose Delivery Stream
-	@echo "#deliver data sent to a Kinesis stream into Elasticsearch via Firehose"
+	@echo "# deliver data sent to a Kinesis stream into Elasticsearch via Firehose"
 	awslocal es create-elasticsearch-domain --domain-name es-local
 	awslocal es list-domain-names 
 
-	@echo "#create our target S3 bucket"
+	@echo "# create our target S3 bucket"
 	awslocal s3 mb s3://kinesis-activity-backup-local
 	awslocal s3 ls
 
-	@echo "#create our Kinesis stream"
+	@echo "# create our Kinesis stream"
 	awslocal kinesis create-stream --stream-name kinesis-es-local-stream --shard-count 2
 	awslocal kinesis list-streams
 
@@ -33,7 +31,6 @@ create:		## Creating an Kinesis Data Firehose Delivery Stream
 
 	@echo "# Check whether the Elasticsearch cluster is already started up, wait false"
 	awslocal es describe-elasticsearch-domain --domain-name es-local | jq ".DomainStatus.Processing"
-
 
 list:		## Lists your delivery streams in alphabetical order of their names
 	awslocal firehose list-delivery-streams
