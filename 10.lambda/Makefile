@@ -78,7 +78,7 @@ get: 		## Retrieve a Lambda function
 ver:		## get lambda layer arn
 	$(eval LAYER_VER=$(shell awslocal lambda list-layers --query 'Layers[?LayerName==`layer1`].LatestMatchingVersion.Version' --output text))
 
-clean: ver 	 ## clean Up
+clean: ver 	## clean Up
 	@echo "# Delete function"
 	awslocal lambda delete-function --function-name func1 || true
 	awslocal lambda list-functions
