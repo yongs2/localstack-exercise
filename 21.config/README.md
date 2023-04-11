@@ -11,7 +11,6 @@ awslocal configservice put-configuration-recorder \
   --recording-group allSupported=true,includeGlobalResourceTypes=true
 ```
 
-
 ## 2. List all configuration recorders
 
 ```sh
@@ -49,7 +48,6 @@ awslocal configservice describe-delivery-channels
 # Starts recording configurations of the Amazon Web Services resources (https://docs.aws.amazon.com/cli/latest/reference/configservice/start-configuration-recorder.html)
 awslocal configservice start-configuration-recorder --configuration-recorder-name default
 ```
-
 
 ## 5. Clean up
 
