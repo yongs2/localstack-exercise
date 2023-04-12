@@ -51,7 +51,7 @@ qarn: qurl			## Get SQS queue arn
 		--query Attributes.QueueArn \
 		--output text))
 
-sg:				## Get Seurity Group ID
+sg:					## Get Seurity Group ID
 	$(eval SG_ID=$(shell awslocal ec2 \
 		describe-security-groups \
 		--group-names ${GRP_NAME} \
@@ -80,12 +80,12 @@ create:	tarn		## Create an event bus, rule and target
 		--rule my-rule \
 		--targets "Id"="1","Arn"="${TOPIC_ARN}"
 	
-list:			## list all event buses, rules and targets
+list:				## list all event buses, rules and targets
 	awslocal events list-event-buses
 	awslocal events list-rules
 	awslocal events list-targets-by-rule --rule my-rule
 
-put:			## Put Event
+put:				## Put Event
 	@echo "# create event json file"
 	EVENT_JSON_FILE=/tmp/event.json
 	if [ ! -f $${EVENT_JSON_FILE}] ; then \
@@ -103,7 +103,7 @@ put:			## Put Event
 	fi
 	awslocal events put-events --entries file:///tmp/event.json
 
-recv: qurl		## Receive Event from SQS
+recv: qurl			## Receive Event from SQS
 	awslocal sqs receive-message --queue-url ${QUEUE_URL}
 
 clean: dlsns dlsqs	## Delete all resources

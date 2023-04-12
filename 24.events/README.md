@@ -111,7 +111,7 @@ awslocal events put-events --entries file:///tmp/event.json
 awslocal sqs receive-message --queue-url ${QUEUE_URL} --wait-time-seconds 10
 ```
 
-## 6. Clean up
+## 7. Clean up
 
 ```sh
 # delete the sns topic
