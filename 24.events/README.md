@@ -1,4 +1,4 @@
-# [events](https://docs.localstack.cloud/references/coverage/coverage_events/)
+# [EventBridge](https://docs.localstack.cloud/references/coverage/coverage_events/)
 
 See [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html)
 

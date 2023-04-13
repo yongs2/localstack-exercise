@@ -1,4 +1,4 @@
-# [resource-groups](https://docs.localstack.cloud/references/coverage/coverage_resource-groups/)
+# [Resource Groups](https://docs.localstack.cloud/references/coverage/coverage_resource-groups/)
 
 See [AWS Resource Groups](https://docs.aws.amazon.com/ARG/latest/userguide/resource-groups.html)
 
