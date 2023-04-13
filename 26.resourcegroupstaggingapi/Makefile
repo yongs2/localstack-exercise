@@ -45,7 +45,7 @@ values:			## Get all tag values
 		get-tag-values \
 		--key Environment
 
-clean: vpcid	# Delete ec2 vpc and tag
+clean: vpcid	## Delete ec2 vpc and tag
 	awslocal ec2 \
 		delete-tags \
 		--resources ${VPC_ID} \
