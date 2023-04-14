@@ -1,0 +1,14 @@
+---
+schemaVersion: "2.2"
+description: runShellScript with command strings stored as Parameter Store parameter
+parameters:
+  commands:
+    type: StringList
+    description: "(Required) The commands to run on the instance."
+    default: "{{ ssm:myShellCommands }}"
+mainSteps:
+  - action: aws:runShellScript
+    name: runShellScriptDefaultParams
+    inputs:
+      runCommand:
+        - "{{ commands }}"

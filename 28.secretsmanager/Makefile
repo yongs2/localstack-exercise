@@ -31,7 +31,7 @@ update:			## Modify a secret
 get :			## Retrieves the details of a secret
 	awslocal secretsmanager \
 		describe-secret \
-		--secret-id MyTestSecret
+		--secret-id ${SECRET_ID}
 
 list:			## Lists all secrets
 	awslocal secretsmanager \
@@ -40,30 +40,30 @@ list:			## Lists all secrets
 tag:			## Attaches tags to a secret
 	awslocal secretsmanager \
 		tag-resource \
-		--secret-id MyTestSecret \
+		--secret-id ${SECRET_ID} \
 		--tags '[{"Key": "FirstTag", "Value": "FirstValue"}, {"Key": "SecondTag", "Value": "SecondValue"}]'
 
 untag:			## Removes tags from a secret
 	awslocal secretsmanager \
 		untag-resource \
-		--secret-id MyTestSecret \
+		--secret-id ${SECRET_ID} \
 		--tag-keys '[ "FirstTag", "SecondTag"]'
 
 delete:			## Deletes a secret
 	awslocal secretsmanager \
 		delete-secret \
-		--secret-id MyTestSecret \
+		--secret-id ${SECRET_ID} \
 		--recovery-window-in-days 7
 
 restore:		## Restores a secret
 	awslocal secretsmanager \
 		restore-secret \
-		--secret-id MyTestSecret
+		--secret-id ${SECRET_ID}
 
 clean:			## Delete a secret immediately
 	awslocal secretsmanager \
 		delete-secret \
-		--secret-id MyTestSecret \
+		--secret-id ${SECRET_ID} \
 		--force-delete-without-recovery
 
 .PHONY: usage install create update get list tag untag delete restore clean
