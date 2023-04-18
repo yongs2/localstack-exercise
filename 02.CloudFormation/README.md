@@ -2,7 +2,7 @@
 
 See [AWSCloudFormation](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/Welcome.html)
 
-## 1. deploy the bucket on LocalStack
+## 1. Using AWS CLI
 
 ### 1.1 Deploy the bucket on LocalStack
 
@@ -19,7 +19,7 @@ awslocal s3api list-buckets
 awslocal cloudformation delete-stack --stack-name cfn-quickstart-stack
 ```
 
-## 2. deploy the EC2 instance on LocalStack
+## 1.2 deploy the EC2 instance on LocalStack
 
 ```sh
 awslocal cloudformation deploy --stack-name ec2-instance --template-file "./ec2-instance.yaml"
@@ -29,4 +29,30 @@ awslocal cloudformation list-stacks
 awslocal ec2 describe-instances
 
 awslocal cloudformation delete-stack --stack-name ec2-instance
+```
+
+## 2. Using terraform
+
+### 2.1 Deploy the bucket and EC2 instance on LocalStack
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.2 List stacks and check the bucket and EC2 instance
+
+```sh
+awslocal cloudformation list-stacks
+
+awslocal s3api list-buckets
+awslocal ec2 describe-instances
+```
+
+### 2.3 Delete the stack
+
+```sh
+terraform destroy -auto-approve
 ```
