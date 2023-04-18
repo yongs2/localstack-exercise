@@ -23,7 +23,11 @@ replicas:	## create replicas
 		--region ap-south-1
 
 list:		## list a table
+	@echo "# default region us-east-1"
+	awslocal dynamodb list-tables --region us-east-1    
+	awslocal dynamodb list-tables --region ap-south-1
 	awslocal dynamodb list-tables --region eu-central-1
+	awslocal dynamodb list-tables --region us-west-1
 
 put:		## put itm to table
 	awslocal dynamodb put-item --table-name global01 --item '{"id":{"S":"foo"}}' --region eu-central-1

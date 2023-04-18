@@ -16,6 +16,7 @@ provider "aws" {
   skip_metadata_api_check     = true
   skip_requesting_account_id  = true
 
+  # curl -s http://localhost:4566/_localstack/health | jq .
   endpoints {
     acm                      = "http://localhost:4566"
     apigateway               = "http://localhost:4566"
@@ -33,6 +34,8 @@ provider "aws" {
     kinesis                  = "http://localhost:4566"
     kms                      = "http://localhost:4566"
     lambda                   = "http://localhost:4566"
+    logs                     = "http://localhost:4566"
+    opensearch               = "http://localhost:4566"
     redshift                 = "http://localhost:4566"
     resourcegroups           = "http://localhost:4566"
     resourcegroupstaggingapi = "http://localhost:4566"
@@ -42,7 +45,6 @@ provider "aws" {
     s3control                = "http://localhost:4566"
     secretsmanager           = "http://localhost:4566"
     ses                      = "http://localhost:4566"
-    sesv2                    = "http://localhost:4566"
     sns                      = "http://localhost:4566"
     sqs                      = "http://localhost:4566"
     ssm                      = "http://localhost:4566"

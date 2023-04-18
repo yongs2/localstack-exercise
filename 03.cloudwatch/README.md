@@ -43,6 +43,8 @@ awslocal cloudwatch delete-alarms --alarm-names my-alarm
 
 ## 2. Using terraform
 
+- [Resource: aws_cloudwatch_metric_alarm](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_metric_alarm)
+
 ### 2.1 Create Metric alarm
 
 ```sh
