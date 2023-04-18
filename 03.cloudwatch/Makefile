@@ -9,7 +9,8 @@ install:	## Install dependencies
 	@which awslocal || pip install awscli-local
 
 create:		## create metric alarm
-	awslocal cloudwatch put-metric-alarm \
+	awslocal cloudwatch \
+		put-metric-alarm \
 		--alarm-name my-alarm \
 		--metric-name Orders \
 		--namespace test \
@@ -21,10 +22,17 @@ create:		## create metric alarm
 		--treat-missing notBreaching
 
 get:		## get the metric alarm
-	awslocal cloudwatch describe-alarms --alarm-names my-alarm | jq '.MetricAlarms[0].StateValue'
+	awslocal cloudwatch \
+  		describe-alarms \
+		--alarm-names my-alarm \
+		--query 'MetricAlarms[0].StateValue' \
+		--output text
 
 alarm:		## set the metric alarm to state ALARM
-	awslocal cloudwatch put-metric-data --namespace test --metric-data '[{"MetricName": "Orders", "Value": -1}]'
+	awslocal cloudwatch \
+		put-metric-data \
+		--namespace test \
+		--metric-data '[{"MetricName": "Orders", "Value": -1}]'
 
 clean:	 	## Remove the metric alarm
 	awslocal cloudwatch delete-alarms --alarm-names my-alarm

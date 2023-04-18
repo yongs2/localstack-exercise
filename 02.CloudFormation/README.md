@@ -33,6 +33,8 @@ awslocal cloudformation delete-stack --stack-name ec2-instance
 
 ## 2. Using terraform
 
+- [Resource: aws_cloudformation_stack](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudformation_stack)
+
 ### 2.1 Deploy the bucket and EC2 instance on LocalStack
 
 ```sh

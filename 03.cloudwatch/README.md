@@ -2,7 +2,9 @@
 
 See [Amazon CloudWatch](https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html)
 
-## 1. Create Metric alarm:
+## 1. Using AWS CLI
+
+### 1.1 Create Metric alarm
 
 ```sh
 awslocal cloudwatch put-metric-alarm \
@@ -17,20 +19,57 @@ awslocal cloudwatch put-metric-alarm \
     --treat-missing notBreaching
 ```
 
-## 2. watch the status of the alarm:
+### 1.2 watch the status of the alarm
 
 ```sh
-watch "awslocal cloudwatch describe-alarms --alarm-names my-alarm | jq '.MetricAlarms[0].StateValue'"
+watch awslocal cloudwatch \
+  describe-alarms \
+  --alarm-names my-alarm \
+  --query 'MetricAlarms[0].StateValue' \
+  --output text
 ```
 
-## 3. set the metric-alarm to state ALARM:
+### 1.3 set the metric-alarm to state ALARM
 
 ```sh
 awslocal cloudwatch put-metric-data --namespace test --metric-data '[{"MetricName": "Orders", "Value": -1}]'
 ```
 
-## 4. Delete certificate
+### 1.4 Delete the metric-alarm
 
 ```sh
 awslocal cloudwatch delete-alarms --alarm-names my-alarm
+```
+
+## 2. Using terraform
+
+### 2.1 Create Metric alarm
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.2 watch the status of the alarm
+
+```sh
+watch awslocal cloudwatch \
+  describe-alarms \
+  --alarm-names my-alarm \
+  --query 'MetricAlarms[0].StateValue' \
+  --output text
+```
+
+### 2.3 set the metric-alarm to state ALARM
+
+```sh
+awslocal cloudwatch put-metric-data --namespace test --metric-data '[{"MetricName": "Orders", "Value": -1}]'
+```
+
+### 2.4 Delete the metric-alarm
+
+```sh
+terraform destroy -auto-approve
 ```
