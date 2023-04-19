@@ -1,8 +1,8 @@
-# awslocal iam create-user --user-name test
 variable "username" {
   default = "test"
 }
 
+# awslocal iam create-user --user-name test
 resource "aws_iam_user" "test" {
   name = var.username
 }

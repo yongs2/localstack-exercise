@@ -4,7 +4,7 @@ See [AWS Identity and Access Management](https://docs.aws.amazon.com/IAM/latest/
 
 ## 1. Using AWS CLI
 
-## 1.1 Creating IAM Users and Access Keys
+### 1.1 Creating IAM Users and Access Keys
 
 ```sh
 # By default, if no custom credentials are configured, requests made to LocalStack are running under the administrative root user:
@@ -21,14 +21,14 @@ AWS_SECRET_ACCESS_KEY=$(cat ${RESULT_JSON} | jq -r .AccessKey.SecretAccessKey)
 awslocal sts get-caller-identity
 ```
 
-## 1.2 Enforcing IAM Policies
+### 1.2 Enforcing IAM Policies
 
 ```sh
 awslocal iam create-policy --policy-name p1 --policy-document '{"Version":"2012-10-17","Statement":[{"Effect":"Allow","Action":"s3:CreateBucket","Resource":"*"}]}'
 awslocal iam attach-user-policy --user-name test --policy-arn arn:aws:iam::000000000000:policy/p1
 ```
 
-## 1.3 list 
+### 1.3 list 
 
 ```sh
 # list
@@ -38,7 +38,7 @@ awslocal iam list-policies --query 'Policies[?PolicyName==`p1`].Arn'
 awslocal iam list-user-policies --user-name test
 ```
 
-## 1.4 Get
+### 1.4 Get
 
 ```sh
 # get
@@ -46,7 +46,7 @@ awslocal iam get-user
 awslocal iam get-policy --policy-arn arn:aws:iam::000000000000:policy/p1
 ```
 
-## 1.5 Delete
+### 1.5 Delete
 
 ```sh
 # delete
@@ -74,7 +74,7 @@ terraform plan
 terraform apply -auto-approve
 ```
 
-## 2.2 list 
+### 2.2 list 
 
 ```sh
 # list
@@ -83,7 +83,7 @@ awslocal iam list-access-keys --user-name test
 awslocal iam list-policies --query 'Policies[?PolicyName==`p1`].Arn'
 ```
 
-## 2.3 Get
+### 2.3 Get
 
 ```sh
 # get
@@ -91,7 +91,7 @@ awslocal iam get-user
 awslocal iam get-policy --policy-arn arn:aws:iam::000000000000:policy/p1
 ```
 
-### 2.6 Delete IAM User, Access Key and Policy
+### 2.4 Delete IAM User, Access Key and Policy
 
 ```sh
 terraform destroy -auto-approve
