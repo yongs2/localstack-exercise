@@ -16,7 +16,7 @@ awslocal es create-elasticsearch-domain --domain-name my-domain
 
 ```sh
 # If the Processing status is true, it means that the cluster is not yet healthy
-awslocal es describe-elasticsearch-domain --domain-name my-domain | jq ".DomainStatus.Processing"
+awslocal es describe-elasticsearch-domain --domain-name my-domain --query DomainStatus.Processing
 ```
 
 ### 1.3 Interact with the cluster
@@ -66,7 +66,7 @@ terraform apply -auto-approve
 
 ```sh
 # If the Processing status is true, it means that the cluster is not yet healthy
-awslocal es describe-elasticsearch-domain --domain-name my-domain | jq ".DomainStatus.Processing"
+awslocal es describe-elasticsearch-domain --domain-name my-domain --query DomainStatus.Processing
 ```
 
 ### 2.3 Interact with the cluster

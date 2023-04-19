@@ -12,7 +12,7 @@ create:		## create a domain
 	awslocal es create-elasticsearch-domain --domain-name my-domain
 
 get:		## get domain status, wait false
-	awslocal es describe-elasticsearch-domain --domain-name my-domain | jq ".DomainStatus.Processing"
+	awslocal es describe-elasticsearch-domain --domain-name my-domain --query DomainStatus.Processing
 
 interact:	## interact a domain
 	curl http://my-domain.us-east-1.es.localhost.localstack.cloud:4566

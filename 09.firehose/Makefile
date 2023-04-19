@@ -30,7 +30,7 @@ create:		## Creating an Kinesis Data Firehose Delivery Stream
 	awslocal firehose list-delivery-streams
 
 	@echo "# Check whether the Elasticsearch cluster is already started up, wait false"
-	awslocal es describe-elasticsearch-domain --domain-name es-local | jq ".DomainStatus.Processing"
+	awslocal es describe-elasticsearch-domain --domain-name es-local --query DomainStatus.Processing
 
 list:		## Lists your delivery streams in alphabetical order of their names
 	awslocal firehose list-delivery-streams
@@ -41,10 +41,10 @@ put:		## Put it into Kinesis
 		--data '{ "target": "barry" }' \
 		--partition-key partition
 
-put2:		## Put it into the Firehose delivery stream
+put2:		## FIXME: Put it into the Firehose delivery stream
 	awslocal firehose put-record \
 		--delivery-stream-name activity-to-elasticsearch-local \
-		--record '{"Data":"eyJ0YXJnZXQiOiAiSGVsbG8gd29ybGQifQ=="}'
+		--record '{"Data":"eyJ0YXJnZXQiOiJIZWxsbyB3b3JsZCJ9"}'
 
 check: 		## Check the entries in Elasticsearch
 	curl -s http://es-local.us-east-1.es.localhost.localstack.cloud:4566/activity/_search | jq '.hits.hits'
@@ -64,6 +64,6 @@ clean: 	 	## clean Up
 
 	@echo "# Delete the Elasticsearch domain"
 	awslocal es delete-elasticsearch-domain --domain-name es-local
-	awslocal es list-domain-names 
+	awslocal es list-domain-names
 	
 .PHONY: usage install create list put put2 check clean
