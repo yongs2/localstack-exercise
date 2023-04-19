@@ -67,7 +67,7 @@ awslocal acm get-certificate --certificate-arn ${CERT_ARN}
 awslocal acm describe-certificate --certificate-arn ${CERT_ARN}
 ```
 
-## 2.4 Delete certificate
+### 2.4 Delete certificate
 
 ```sh
 terraform destroy -auto-approve

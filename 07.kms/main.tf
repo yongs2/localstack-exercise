@@ -1,6 +1,7 @@
 variable "plaintext" {
   default = "some important stuff"
 }
+
 # awslocal kms create-key
 resource "aws_kms_key" "test" {
   description             = "test kms key"

@@ -19,7 +19,7 @@ awslocal s3api list-buckets
 awslocal cloudformation delete-stack --stack-name cfn-quickstart-stack
 ```
 
-## 1.2 deploy the EC2 instance on LocalStack
+### 1.2 deploy the EC2 instance on LocalStack
 
 ```sh
 awslocal cloudformation deploy --stack-name ec2-instance --template-file "./ec2-instance.yaml"
