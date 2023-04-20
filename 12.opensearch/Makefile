@@ -12,11 +12,14 @@ create:		## create a domain
 	awslocal opensearch create-domain --domain-name my-domain
 
 get:		## get domain status, wait false
-	awslocal opensearch describe-domain --domain-name my-domain | jq ".DomainStatus.Processing"
+	awslocal opensearch describe-domain --domain-name my-domain --query DomainStatus.Processing
 
-interact:	## interact a domain
-	curl http://my-domain.us-east-1.opensearch.localhost.localstack.cloud:4566
-	curl -s http://my-domain.us-east-1.opensearch.localhost.localstack.cloud:4566/_cluster/health | jq .
+ep:		## get domain endpoint
+	$(eval ENDPOINT=$(shell awslocal opensearch describe-domain --domain-name my-domain --query DomainStatus.Endpoint --output text))
+
+interact: ep	## interact a domain
+	curl http://${ENDPOINT}
+	curl -s http://${ENDPOINT}/_cluster/health | jq .
 
 list:		## list all domains
 	awslocal opensearch list-domain-names 

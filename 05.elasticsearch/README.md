@@ -22,11 +22,13 @@ awslocal es describe-elasticsearch-domain --domain-name my-domain --query Domain
 ### 1.3 Interact with the cluster
 
 ```sh
+ENDPOINT=$(awslocal es describe-elasticsearch-domain --domain-name my-domain --query DomainStatus.Endpoint --output text)
+
 # Interact with the cluster
-curl http://my-domain.us-east-1.es.localhost.localstack.cloud:4566
+curl http://${ENDPOINT}
 
 # Check the cluster health endpoint
-curl -s http://my-domain.us-east-1.es.localhost.localstack.cloud:4566/_cluster/health | jq .
+curl -s http://${ENDPOINT}/_cluster/health | jq .
 ```
 
 ### 1.4 list
@@ -65,24 +67,21 @@ terraform apply -auto-approve
 ### 2.2 Get Domain Status
 
 ```sh
-# If the Processing status is true, it means that the cluster is not yet healthy
 awslocal es describe-elasticsearch-domain --domain-name my-domain --query DomainStatus.Processing
 ```
 
 ### 2.3 Interact with the cluster
 
 ```sh
-# Interact with the cluster
-curl http://my-domain.us-east-1.es.localhost.localstack.cloud:4566
+ENDPOINT=$(terraform output -json | jq -r '.mydomain.value.endpoint')
 
-# Check the cluster health endpoint
-curl -s http://my-domain.us-east-1.es.localhost.localstack.cloud:4566/_cluster/health | jq .
+curl http://${ENDPOINT}
+curl -s http://${ENDPOINT}/_cluster/health | jq .
 ```
 
 ### 2.4 list
 
 ```sh
-# Returns the name of all Elasticsearch domains owned by the current user's account. (https://docs.aws.amazon.com/cli/latest/reference/es/list-domain-names.html)
 awslocal es list-domain-names 
 ```
 
