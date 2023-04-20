@@ -20,4 +20,7 @@ verify:		## Verify email identity
 list:		## List email identities
 	awslocal ses list-identities
 
-.PHONY: usage install send verify list
+clean:		## Clean up
+	awslocal ses delete-identity --identity user1@yourdomain.com
+
+.PHONY: usage install send verify list clean
