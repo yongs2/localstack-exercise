@@ -2,7 +2,9 @@
 
 See [AWS Lambda](https://docs.aws.amazon.com/lambda/latest/dg/welcome.html)
 
-## 1. Creating Lambda layers locally
+## 1. Using AWS CLI
+
+### 1.1 Creating Lambda layers locally
 
 ```sh
 # create layer zip file
@@ -18,17 +20,20 @@ awslocal lambda publish-layer-version \
     --layer-name layer1 \
     --zip-file fileb:///tmp/testlayer.zip
 
+# Get layer version
+LAYER_VER=$(awslocal lambda list-layers --query 'Layers[?LayerName==`layer1`].LatestMatchingVersion.Version' --output text)
+
 # Returns information about a version of an Lambda layer (https://docs.aws.amazon.com/cli/latest/reference/lambda/get-layer-version.html)
 LAYER_ARN=$(awslocal lambda get-layer-version \
     --layer-name layer1 \
-    --version-number 2 \
+    --version-number ${LAYER_VER} \
     --query LayerArn --output text)
 
 # Lists Lambda layers and shows information about the latest version of each (https://docs.aws.amazon.com/cli/latest/reference/lambda/list-layers.html)
 LAYER_VER_ARN=$(awslocal lambda list-layers --query 'Layers[?LayerName==`layer1`].LatestMatchingVersion.LayerVersionArn' --output text)
 ```
 
-### 2. Create a simple Lambda function
+### 1.2 Create a simple Lambda function
 
 ```sh
 # create function zip file
@@ -53,7 +58,7 @@ awslocal lambda create-function \
 awslocal lambda list-functions
 ```
 
-## 3. Get logs
+### 1.3 Get logs
 
 ```sh
 # Invokes a Lambda function (https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html)
@@ -65,7 +70,7 @@ awslocal lambda invoke \
     --output text |  base64 -d
 ```
 
-## 4. Update Function
+### 1.4 Update Function
 
 ```sh
 # Modify the version-specific settings of a Lambda function (https://docs.aws.amazon.com/cli/latest/reference/lambda/update-function-configuration.html)
@@ -74,14 +79,14 @@ awslocal lambda update-function-configuration \
   --memory-size 256
 ```
 
-## 5. Retrieve a Lambda function
+### 1.5 Retrieve a Lambda function
 
 ```sh
 # Returns information about the function or function version (https://docs.aws.amazon.com/cli/latest/reference/lambda/get-function.html)
 awslocal lambda get-function --function-name func1
 ```
 
-## 6. Clean Up
+### 1.6 Clean Up
 
 ```sh
 # Deletes a Lambda function (https://docs.aws.amazon.com/cli/latest/reference/lambda/delete-function.html)
@@ -89,6 +94,59 @@ awslocal lambda delete-function --function-name func1
 awslocal lambda list-functions
 
 # Delete layer
-awslocal lambda delete-layer-version --layer-name layer1 --version-number 1
+awslocal lambda delete-layer-version --layer-name layer1 --version-number ${LAYER_VER}
 awslocal lambda list-layers
+```
+
+## 2. Using terraform
+
+- [Resource: aws_lambda_layer_version](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_layer_version)
+
+### 2.1 Creating a Lambda layer and a simple Lambda function
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.2 List lambda functions
+
+```sh
+awslocal lambda list-functions
+```
+
+### 2.3 Get logs
+
+```sh
+awslocal lambda invoke \
+    --function-name func1 \
+    out.log \
+    --log-type Tail \
+    --query 'LogResult' \
+    --output text |  base64 -d
+```
+
+### 2.4 Update Function
+
+```sh
+awslocal lambda update-function-configuration \
+  --function-name func1 \
+  --memory-size 256
+```
+
+### 2.5 Retrieve a Lambda function
+
+```sh
+awslocal lambda get-function --function-name func1
+```
+
+### 2.6 Delete a Lambda layer and a simple Lambda function
+
+```sh
+terraform destroy -auto-approve
+
+# Remove archive files
+rm -f /tmp/test*.zip
 ```

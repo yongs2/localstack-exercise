@@ -10,9 +10,9 @@ install:	## Install dependencies
 
 create:		## Creating Lambda layers locally
 	@echo "# Create layer zip file"
-	LAYER_DIR=/tmp/python
-	LAYER_FILE=$${LAYER_DIR}/testlayer.py
-	if [ ! -d $${LAYER_DIR} ] ; then mkdir -p $${LAYER_DIR} ; fi
+	LAYER_DIR=/tmp/python; \
+	LAYER_FILE=$${LAYER_DIR}/testlayer.py ; \
+	if [ ! -d $${LAYER_DIR} ] ; then mkdir -p $${LAYER_DIR} ; fi ; \
 	if [ ! -f $${LAYER_FILE}] ; then \
 		touch $${LAYER_FILE} ; \
 		echo 'def util():' >> $${LAYER_FILE} ; \
@@ -33,8 +33,8 @@ arn:		## get lambda layer arn
 
 func: arn	## Create the Lambda function
 	@echo "# create function zip file"
-	LAMBDA_FILE=/tmp/testlambda.py
-	if [ ! -f $${LAMBDA_FILE}] ; then \
+	LAMBDA_FILE=/tmp/testlambda.py; \
+	if [ ! -f $${LAMBDA_FILE} ] ; then \
 		touch $${LAMBDA_FILE} ; \
 		echo 'def handler(*args, **kwargs):' >> $${LAMBDA_FILE} ; \
 		echo '  import testlayer; testlayer.util()' >> $${LAMBDA_FILE} ; \
@@ -62,7 +62,7 @@ list:	## list layers and functions
 log:		## get logs
 	awslocal lambda invoke \
 		--function-name func1 \
-		out \
+		out.log \
 		--log-type Tail \
 		--query 'LogResult' \
 		--output text |  base64 -d
@@ -87,4 +87,4 @@ clean: ver 	## clean Up
 	awslocal lambda delete-layer-version --layer-name layer1 --version-number ${LAYER_VER} || true
 	awslocal lambda list-layers
 	
-.PHONY: usage install create arn func list log update get ver clean
+.PHONY: usage install create func list log update get clean
