@@ -19,7 +19,7 @@ create:			## Create a transcription job
 	awslocal transcribe start-transcription-job \
 		--transcription-job-name example \
 		--media MediaFileUri=s3://foo/transcribe-sample.mp3 \
-		--language-code en-IN
+		--language-code en-US
 
 list:			## List all the transcription jobs
 	awslocal transcribe list-transcription-jobs
