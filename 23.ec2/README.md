@@ -2,13 +2,15 @@
 
 See [Amazon Elastic Compute Cloud](hhttps://docs.aws.amazon.com/AWSEC2/latest/UserGuide/concepts.html)
 
-## 1. list all image list
+## 1. Using AWS CLI
+
+### 1.1 list all image list
 
 ```sh
 awslocal ec2 describe-images --query 'Images[].ImageId' --output json
 ```
 
-## 2. Create Security Group
+### 1.2 Create Security Group
 
 ```sh
 # Creates a security group (https://docs.aws.amazon.com/cli/latest/reference/ec2/create-security-group.html)
@@ -29,7 +31,7 @@ SG_ID=$(awslocal ec2 \
   --output text)
 ```
 
-## 3. Create Key Pair
+### 1.3 Create Key Pair
 
 ```sh
 KEY_NAME=mung-key
@@ -41,7 +43,7 @@ awslocal ec2 create-key-pair --key-name ${KEY_NAME}
 awslocal ec2 describe-key-pairs --key-name ${KEY_NAME}
 ```
 
-## 4. Create ec2 instance
+### 1.4 Create ec2 instance
 
 ```sh
 # Launches the specified number of instances using an AMI for which you have permissions (https://docs.aws.amazon.com/cli/latest/reference/ec2/run-instances.html)
@@ -53,7 +55,7 @@ awslocal ec2 run-instances \
   --security-group-ids ${SG_ID}
 ```
 
-## 5. List all ec2 instances
+### 1.5 List all ec2 instances
 
 ```sh
 # list all ec2 instances (https://docs.aws.amazon.com/cli/latest/reference/ec2/describe-instances.html)
@@ -66,7 +68,7 @@ awslocal ec2 describe-key-pairs
 awslocal ec2 describe-security-groups
 ```
 
-## 6. Clean up
+### 1.6 Clean up
 
 ```sh
 # Get ec2 instance id
@@ -91,4 +93,33 @@ awslocal ec2 \
 
 # Deletes a security group. (https://docs.aws.amazon.com/cli/latest/reference/ec2/delete-security-group.html)
 awslocal ec2 delete-security-group --group-name default
+```
+
+## 2. Using terraform
+
+- [Resource: aws_security_group](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group)
+- [Resource: aws_key_pair](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/key_pair)
+- [Resource: aws_instance](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance)
+
+### 2.1 Create a ec2 instance
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.2 List all ec2 instances
+
+```sh
+awslocal ec2 describe-instances
+awslocal ec2 describe-key-pairs
+awslocal ec2 describe-security-groups
+```
+
+### 2.3 Stop the ec2 instance
+
+```sh
+terraform destroy -auto-approve
 ```

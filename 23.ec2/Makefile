@@ -53,7 +53,7 @@ instid:			## Get instance ID
 		--output text))
 
 clean: instid	## Delete ec2 instance
-	awslocal ec2 terminate-instances --instance-ids ${INST_ID}
+	awslocal ec2 terminate-instances --instance-ids ${INST_ID} || true
 	awslocal ec2 \
 		describe-instances \
 		--query 'Reservations[].Instances[?InstanceId==`'${INST_ID}'`].State.Name' \
