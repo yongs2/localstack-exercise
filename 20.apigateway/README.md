@@ -2,7 +2,9 @@
 
 See [Amazon API Gateway](https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html)
 
-## 1. Create an API
+## 1. Using AWS CLI
+
+### 1.1 Create an API
 
 ```sh
 # Creates a new RestApi resource (https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-rest-api.html)
@@ -15,7 +17,7 @@ API_ID=$(awslocal apigateway get-rest-apis --query 'items[?name==`My First API`]
 ROOT_ID=$(awslocal apigateway get-resources --rest-api-id ${API_ID} --query 'items[?path==`/`].id' --output text)
 ```
 
-## 2. Create new resource and method
+### 1.2 Create new resource and method
 
 ```sh
 # Create new resource (https://docs.aws.amazon.com/cli/latest/reference/apigateway/create-resource.html)
@@ -37,7 +39,7 @@ awslocal apigateway put-integration --rest-api-id ${API_ID} --resource-id ${RSC_
 awslocal apigateway put-integration-response --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET --status-code 200 --response-templates '{"application/json": ""}'
 ```
 
-## 3. List all resources and methods
+### 1.3 List all resources and methods
 
 ```sh
 awslocal apigateway get-resources --rest-api-id ${API_ID}
@@ -55,14 +57,14 @@ awslocal apigateway get-integration --rest-api-id ${API_ID} --resource-id ${RSC_
 awslocal apigateway get-integration-response --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET --status-code 200
 ```
 
-## 4. Invoke the API
+### 1.4 Invoke the API
 
 ```sh
 # Simulate the invocation of a Method in your RestApi with headers, parameters, and an incoming request body (https://docs.aws.amazon.com/cli/latest/reference/apigateway/test-invoke-method.html)
 awslocal apigateway test-invoke-method --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET --path-with-query-string '/get?foo=bar'
 ```
 
-## 5. Clean up
+### 1.5 Clean up
 
 ```sh
 # Represents a delete integration response (https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-integration-response.html)
@@ -82,4 +84,51 @@ awslocal apigateway delete-resource --rest-api-id ${API_ID} --resource-id ${RSC_
 
 # Deletes the specified API (https://docs.aws.amazon.com/cli/latest/reference/apigateway/delete-rest-api.html)
 awslocal apigateway delete-rest-api --rest-api-id ${API_ID}
+```
+
+## 2. Using terraform
+
+- [Resource: aws_api_gateway_rest_api](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_rest_api)
+- [Resource: aws_api_gateway_resource](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_resource)
+- [Resource: aws_api_gateway_method](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_method)
+- [Resource: aws_api_gateway_method_response](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_method_response)
+- [Resource: aws_api_gateway_integration](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_integration)
+- [Resource: aws_api_gateway_integration_response](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/api_gateway_integration_response)
+
+### 2.1 Create an API, new resource and method
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.2 List all resources and methods
+
+```sh
+API_ID=$(terraform output -raw api_id)
+RSC_GET_ID=$(terraform output -raw resource_id)
+
+awslocal apigateway get-resources --rest-api-id ${API_ID}
+
+awslocal apigateway get-method --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET
+
+awslocal apigateway get-method-response --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET --status-code 200
+
+awslocal apigateway get-integration --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET
+
+awslocal apigateway get-integration-response --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET --status-code 200
+```
+
+### 2.3 Invoke the API
+
+```sh
+awslocal apigateway test-invoke-method --rest-api-id ${API_ID} --resource-id ${RSC_GET_ID} --http-method GET --path-with-query-string '/get?foo=bar'
+```
+
+### 2.4 Delete an API, the resource and method
+
+```sh
+terraform destroy -auto-approve
 ```
