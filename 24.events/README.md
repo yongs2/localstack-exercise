@@ -158,7 +158,46 @@ terraform plan
 terraform apply -auto-approve
 ```
 
-### 2.3 Stop the event bus, rule, target
+### 2.2 List all event-bus, rule and target
+
+```sh
+awslocal events list-event-buses
+awslocal events list-rules \
+  --event-bus-name my-event-bus
+awslocal events list-targets-by-rule \
+  --rule my-rule \
+  --event-bus-name my-event-bus
+```
+
+### 2.3 put events
+
+- Must specify the event bus name
+
+```sh
+cat << EOF | tee /tmp/event.json
+[
+  {
+    "EventBusName": "my-event-bus",
+    "Time": "2022-04-12T13:00:00Z",
+    "Source": "my-application",
+    "Resources": ["resource-1"],
+    "DetailType": "myDetailType",
+    "Detail": "{\"key1\": \"value1\", \"key2\": \"value2\"}"
+  }
+]
+EOF
+
+# Sends custom events to Amazon EventBridge so that they can be matched to rules (https://docs.aws.amazon.com/cli/latest/reference/events/put-events.html)
+awslocal events put-events --entries file:///tmp/event.json
+```
+
+### 2.4 Check a message in SQS queue
+
+```sh
+awslocal sqs receive-message --queue-url ${QUEUE_URL} --wait-time-seconds 10
+```
+
+### 2.5 Delete the event bus, rule, target
 
 ```sh
 terraform destroy -auto-approve
