@@ -2,7 +2,9 @@
 
 See [Amazon EventBridge](https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-what-is.html)
 
-## 1. Create sns topic and sqs queue
+## 1. Using AWS CLI
+
+### 1.1 Create sns topic and sqs queue
 
 ```sh
 # Create SNS topic
@@ -39,7 +41,7 @@ awslocal sns subscribe \
   --notification-endpoint ${QUEUE_ARN}
 ```
 
-## 2. Create an event bus
+### 1.2 Create an event bus
 
 ```sh
 # Creates a new event bus within your account (https://docs.aws.amazon.com/cli/latest/reference/events/create-event-bus.html)
@@ -52,46 +54,50 @@ awslocal events list-event-buses
 awslocal events describe-event-bus --name my-event-bus
 ```
 
-## 3. Create a Rule
+### 1.3 Create a Rule
 
-- Can't set event-bus-name when calling put-rule, use existing default
+- If you omit --event-bus-name, the default event bus is used
 
 ```sh
 # Creates or updates the specified rule (https://docs.aws.amazon.com/cli/latest/reference/events/put-rule.html)
 awslocal events put-rule \
   --name my-rule \
+  --event-bus-name my-event-bus \
   --event-pattern '{"source":["my-application"],"detail-type": ["myDetailType"]}'
-
+  
 # Lists your Amazon EventBridge rules (https://docs.aws.amazon.com/cli/latest/reference/events/list-rules.html)
-awslocal events list-rules
+awslocal events list-rules --event-bus-name my-event-bus
 
 # Describes the specified rule (https://docs.aws.amazon.com/cli/latest/reference/events/describe-rule.html)
-awslocal events describe-rule --name my-rule
+awslocal events describe-rule --name my-rule --event-bus-name my-event-bus
 ```
 
-## 4. Create a target
+### 1.4 Create a target
 
-- Can't set event-bus-name when calling put-rule, use existing default
+- If you omit --event-bus-name, the default event bus is used
 
 ```sh
 # Adds the specified targets to the specified rule (https://docs.aws.amazon.com/cli/latest/reference/events/put-targets.html)
 awslocal events put-targets \
   --rule my-rule \
+  --event-bus-name my-event-bus \
   --targets "Id"="1","Arn"="${TOPIC_ARN}"
 
 # Lists the targets assigned to the specified rule (https://docs.aws.amazon.com/cli/latest/reference/events/list-targets-by-rule.html)
-awslocal events list-targets-by-rule --rule my-rule
+awslocal events list-targets-by-rule \
+  --rule my-rule \
+  --event-bus-name my-event-bus
 ```
 
-## 5. put events
+### 1.5 put events
 
-- Can't set event-bus-name when calling put-rule, use existing default
+- Must specify the event bus name
 
 ```sh
 cat << EOF | tee /tmp/event.json
 [
   {
-    "EventBusName": "default",
+    "EventBusName": "my-event-bus",
     "Time": "2022-04-12T13:00:00Z",
     "Source": "my-application",
     "Resources": ["resource-1"],
@@ -105,13 +111,13 @@ EOF
 awslocal events put-events --entries file:///tmp/event.json
 ```
 
-## 6. Check a message in SQS queue
+### 1.6 Check a message in SQS queue
 
 ```sh
 awslocal sqs receive-message --queue-url ${QUEUE_URL} --wait-time-seconds 10
 ```
 
-## 7. Clean up
+### 1.7 Clean up
 
 ```sh
 # delete the sns topic
@@ -126,13 +132,34 @@ awslocal sqs delete-queue --queue-url ${QUEUE_URL}
 
 # Removes the specified targets from the specified rule (https://docs.aws.amazon.com/cli/latest/reference/events/remove-targets.html)
 awslocal events remove-targets --rule my-rule --ids 0 1
-awslocal events list-targets-by-rule --rule my-rule
+awslocal events list-targets-by-rule --rule my-rule --event-bus-name my-event-bus
 
 # Deletes the specified rule (https://docs.aws.amazon.com/cli/latest/reference/events/delete-rule.html)
 awslocal events delete-rule --name my-rule
-awslocal events list-rules
+awslocal events list-rules --event-bus-name my-event-bus
 
 # Deletes the specified custom event bus or partner event bus (https://docs.aws.amazon.com/cli/latest/reference/events/delete-event-bus.html)
 awslocal events delete-event-bus --name my-event-bus
 awslocal events list-event-buses
+```
+
+## 2. Using terraform
+
+- [Resource: aws_cloudwatch_event_bus](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_bus)
+- [Resource: aws_cloudwatch_event_rule](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_rule)
+- [Resource: aws_cloudwatch_event_target](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/cloudwatch_event_target)
+
+### 2.1 Create a event bus, rule, target
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.3 Stop the event bus, rule, target
+
+```sh
+terraform destroy -auto-approve
 ```

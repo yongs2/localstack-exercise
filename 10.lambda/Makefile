@@ -13,7 +13,7 @@ create:		## Creating Lambda layers locally
 	LAYER_DIR=/tmp/python; \
 	LAYER_FILE=$${LAYER_DIR}/testlayer.py ; \
 	if [ ! -d $${LAYER_DIR} ] ; then mkdir -p $${LAYER_DIR} ; fi ; \
-	if [ ! -f $${LAYER_FILE}] ; then \
+	if [ ! -f $${LAYER_FILE} ] ; then \
 		touch $${LAYER_FILE} ; \
 		echo 'def util():' >> $${LAYER_FILE} ; \
 		echo '    print("Output from Lambda layer util function")' >> $${LAYER_FILE} ; \
