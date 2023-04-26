@@ -23,7 +23,7 @@ desc:			## Retrieves the maintenance windows in an Amazon Web Services account
 	awslocal ssm \
 		describe-maintenance-windows
 
-id:				## Get Windows ID from Name
+id:			## Get Windows ID from Name
 	$(eval WINDOW_ID=$(shell awslocal ssm \
 		describe-maintenance-windows \
 		--query 'WindowIdentities[?Name==`'${WINDDOW_NAME}'`].WindowId' \
@@ -33,6 +33,26 @@ get : id		## Retrieves a maintenance window
 	awslocal ssm \
 		get-maintenance-window \
 		--window-id ${WINDOW_ID}
+
+atag: id		## FIXME: add tags to a maintenance window (400, InvalidResourceId)
+	awslocal ssm \
+		add-tags-to-resource \
+		--resource-type "MaintenanceWindow" \
+		--resource-id "${WINDOW_ID}" \
+		--tags "Key=Purpose,Value=Tutorial" "Key=Environment,Value=Test"
+
+ltag: id		## FIXME: list tags for a maintenance window (400, InvalidResourceId)
+	awslocal ssm \
+		list-tags-for-resource \
+		--resource-type "MaintenanceWindow" \
+		--resource-id "${WINDOW_ID}"
+
+dtag: id		## FIXME: removes tags from a maintenance window (400, InvalidResourceId)
+	awslocal ssm \
+		remove-tags-from-resource \
+		--resource-type "MaintenanceWindow" \
+		--resource-id "${WINDOW_ID}" \
+		--tag-keys "Purpose"
 
 update: id		# FIXME: Updates an existing maintenance window (501)
 	awslocal ssm \
@@ -97,4 +117,4 @@ clean: id		## Deletes a maintenance window
 		delete-maintenance-window \
 		--window-id ${WINDOW_ID}
 
-.PHONY: usage install create desc get list update clean
+.PHONY: usage install create desc get clean

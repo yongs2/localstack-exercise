@@ -23,7 +23,7 @@ list:			## list all commands
 	awslocal ssm \
 		list-commands
 
-id:				## Get command id
+id:			## Get command id
 	$(eval CMD_ID=$(shell awslocal ssm \
 		list-commands \
 		--query 'Commands[?DocumentName==`'${DOC_NAME}'`].CommandId' \
