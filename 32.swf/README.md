@@ -2,11 +2,13 @@
 
 See [Amazon Simple Workflow Service](https://docs.aws.amazon.com/amazonswf/latest/developerguide/swf-welcome.html)
 
-## 1. Setup
+## 1. Using AWS CLI
+
+### 1. Domain
 
 - [Refer test cases](https://github.com/localstack/localstack/blob/master/tests/integration/test_swf.py)
 
-## 1.1 RegisterDomain
+#### 1.1 RegisterDomain
 
 ```sh
 # register-domain
@@ -18,7 +20,7 @@ awslocal swf \
     --description "Default domain for localstack"
 ```
 
-## 1.2 ListDomains
+#### 1.2 ListDomains
 
 ```sh
 # Returns the list of domains registered in the account (https://docs.aws.amazon.com/cli/latest/reference/swf/list-domains.html)
@@ -27,7 +29,7 @@ awslocal swf \
     --registration-status REGISTERED
 ```
 
-## 1.3 DescribeDomain
+#### 1.3 DescribeDomain
 
 ```sh
 # describe-domain
@@ -37,9 +39,9 @@ awslocal swf \
     --name default
 ```
 
-## 2. Given workflow
+### 2. Given workflow
 
-### 2.1 RegisterWorkflowType
+#### 2.1 RegisterWorkflowType
 
 ```sh
 # register-workflow-type
@@ -51,7 +53,7 @@ awslocal swf \
     --workflow-version "v1"
 ```
 
-### 2.2 ListWorkflowTypes
+#### 2.2 ListWorkflowTypes
 
 ```sh
 # list-workflow-types
@@ -62,7 +64,7 @@ awslocal swf \
     --registration-status REGISTERED
 ```
 
-### 2.3 DescribeWorkflowType
+#### 2.3 DescribeWorkflowType
 
 ```sh
 # describe-workflow-type
@@ -73,7 +75,7 @@ awslocal swf \
     --workflow-type "name=MySimpleWorkflow,version=v1"
 ```
 
-### 2.4 RegisterActivityType
+#### 2.4 RegisterActivityType
 
 ```sh
 # register-activity-type
@@ -86,7 +88,7 @@ awslocal swf \
     --default-task-list "name=default"
 ```
 
-### 2.5 ListActivityTypes
+#### 2.5 ListActivityTypes
 
 ```sh
 # list-activity-types
@@ -97,7 +99,7 @@ awslocal swf \
     --registration-status REGISTERED
 ```
 
-### 2.6 DescribeActivityType
+#### 2.6 DescribeActivityType
 
 ```sh
 # describe-activity-type
@@ -108,9 +110,9 @@ awslocal swf \
     --activity-type "name=MySimpleActivity,version=v1"
 ```
 
-## 3. When workflow is started
+### 3. When workflow is started
 
-### 3.1 StartWorkflowExecution
+#### 3.1 StartWorkflowExecution
 
 ```sh
 # start-workflow-execution
@@ -130,7 +132,7 @@ RUN_ID=$(awslocal swf \
     --output text)
 ```
 
-### 3.2 GetWorkflowExecutionHistory
+#### 3.2 GetWorkflowExecutionHistory
 
 ```sh
 # get-workflow-execution-history
@@ -141,7 +143,7 @@ awslocal swf \
     --execution "workflowId=${WORKFLOW_ID},runId=${RUN_ID}"
 ```
 
-### 3.3 DescribeWorkflowExecution
+#### 3.3 DescribeWorkflowExecution
 
 ```sh
 # describe-workflow-execution
@@ -152,9 +154,9 @@ awslocal swf \
     --execution "workflowId=${WORKFLOW_ID},runId=${RUN_ID}"
 ```
 
-## 4. Then workflow components execute
+### 4. Then workflow components execute
 
-### 4.1 PollForDecisionTask
+#### 4.1 PollForDecisionTask
 
 ```sh
 # poll-for-decision-task
@@ -165,7 +167,7 @@ awslocal swf \
     --task-list "name=default"
 ```
 
-### 4.2 RespondDecisionTaskCompleted
+#### 4.2 RespondDecisionTaskCompleted
 
 - FIXME: task-token: Invalid token
 
@@ -178,7 +180,7 @@ awslocal swf \
     --decisions "decisionType=ScheduleActivityTask,activityType={name=MySimpleActivity,version=v1},activityId=1"
 ```
 
-### 4.3 PollForActivityTask
+#### 4.3 PollForActivityTask
 
 ```sh
 # poll-for-activity-task
@@ -189,7 +191,7 @@ awslocal swf \
     --task-list "name=default"
 ```
 
-### 4.4 RespondActivityTaskCompleted
+#### 4.4 RespondActivityTaskCompleted
 
 - FIXME: task-token: Invalid token
 
@@ -202,9 +204,9 @@ awslocal swf \
     --result "activity success"
 ```
 
-## 5. Others
+### 5. Others
 
-### 5.1 DeprecateWorkflowType
+#### 5.1 DeprecateWorkflowType
 
 ```sh
 # deprecate-workflow-type
@@ -215,7 +217,7 @@ awslocal swf \
     --workflow-type "name=MySimpleWorkflow,version=v1"
 ```
 
-### 5.2 UndeprecateWorkflowType
+#### 5.2 UndeprecateWorkflowType
 
 ```sh
 # undeprecate-workflow-type
@@ -226,7 +228,7 @@ awslocal swf \
     --workflow-type "name=MySimpleWorkflow,version=v1"
 ```
 
-### 5.3 DeprecateActivityType
+#### 5.3 DeprecateActivityType
 
 ```sh
 # deprecate-activity-type
@@ -237,7 +239,7 @@ awslocal swf \
     --activity-type "name=MySimpleActivity,version=v1"
 ```
 
-### 5.4 UndeprecateActivityType
+#### 5.4 UndeprecateActivityType
 
 ```sh
 # undeprecate-activity-type
@@ -248,7 +250,7 @@ awslocal swf \
     --activity-type "name=MySimpleActivity,version=v1"
 ```
 
-### 5.5 DeprecateDomain
+#### 5.5 DeprecateDomain
 
 ```sh
 # deprecate-domain
@@ -258,7 +260,7 @@ awslocal swf \
     --name default
 ```
 
-### 5.6 UndeprecateDomain
+#### 5.6 UndeprecateDomain
 
 ```sh
 # undeprecate-domain
@@ -268,7 +270,7 @@ awslocal swf \
     --name default
 ```
 
-### 5.7 CountPendingActivityTasks
+#### 5.7 CountPendingActivityTasks
 
 ```sh
 # count-pending-activity-tasks
@@ -279,7 +281,7 @@ awslocal swf \
     --task-list "name=default"
 ```
 
-### 5.8 CountPendingDecisionTasks
+#### 5.8 CountPendingDecisionTasks
 
 ```sh
 # count-pending-decision-tasks
@@ -290,7 +292,7 @@ awslocal swf \
     --task-list "name=default"
 ```
 
-### 5.9 RespondActivityTaskFailed
+#### 5.9 RespondActivityTaskFailed
 
 - FIXME: task-token: Invalid token
 
@@ -304,7 +306,7 @@ awslocal swf \
     --details "activity failed"
 ```
 
-### 5.10 RecordActivityTaskHeartbeat
+#### 5.10 RecordActivityTaskHeartbeat
 
 - FIXME: task-token: Invalid token
 
@@ -317,7 +319,7 @@ awslocal swf \
     --details "activity heartbeat"
 ```
 
-### 5.11 ListOpenWorkflowExecutions
+#### 5.11 ListOpenWorkflowExecutions
 
 ```sh
 # list-open-workflow-executions
@@ -328,7 +330,7 @@ awslocal swf \
     --start-time-filter "oldestDate=2021-01-01T00:00:00Z,latestDate=2026-01-01T00:00:00Z"
 ```
 
-### 5.12 ListClosedWorkflowExecutions
+#### 5.12 ListClosedWorkflowExecutions
 
 ```sh
 # list-closed-workflow-executions
@@ -339,7 +341,7 @@ awslocal swf \
     --start-time-filter "oldestDate=2021-01-01T00:00:00Z,latestDate=2026-01-01T00:00:00Z"
 ```
 
-### 5.13 SignalWorkflowExecution
+#### 5.13 SignalWorkflowExecution
 
 - FIXME: An error occurred (UnknownResourceFault) when calling the TerminateWorkflowExecution operation: Unknown execution, workflowId = workflow-id-1
 
@@ -355,12 +357,7 @@ awslocal swf \
     # --run-id "${RUN_ID}" \
 ```
 
-
-        domain: DomainName,
-        workflow_id: WorkflowId,
-        signal_name: SignalName,
-
-### 5.14 TerminateWorkflowExecution
+#### 5.14 TerminateWorkflowExecution
 
 - FIXME: An error occurred (UnknownResourceFault) when calling the TerminateWorkflowExecution operation: Unknown execution, workflowId = workflow-id-1
 
@@ -373,4 +370,32 @@ awslocal swf \
     --workflow-id "${WORKFLOW_ID}" \
     --reason "test"
     # --run-id "${RUN_ID}" \
+```
+
+## 2. Using terraform
+
+- [Resource: aws_swf_domain](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/swf_domain)
+  - FIXME: listing tags for SWF (Simple Workflow) Domain: InternalFailure (501)
+    - The list_tags_for_resource action has not been implemented
+
+### 2.1 Create a domain
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+```
+
+### 2.2 ListDomains
+
+```sh
+awslocal swf list-domains --registration-status REGISTERED
+awslocal swf list-domains --registration-status DEPRECATED
+```
+
+### 2.3 Delete a domain
+
+```sh
+terraform destroy -auto-approve
 ```
