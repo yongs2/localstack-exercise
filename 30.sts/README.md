@@ -2,8 +2,9 @@
 
 See [AWS Security Token Service](https://docs.aws.amazon.com/STS/latest/APIReference/welcome.html)
 
+## 1. Using AWS CLI
 
-## 1. AssumeRole
+### 1.1 AssumeRole
 
 ```sh
 # Returns a set of temporary security credentials that you can use to access Amazon Web Services resources (https://docs.aws.amazon.com/cli/latest/reference/sts/assume-role.html)
@@ -13,7 +14,7 @@ awslocal sts \
     --role-session-name s3-access-example
 ```
 
-## 2. AssumeRoleWithSAML
+### 1.2 AssumeRoleWithSAML
 
 ```sh
 # [Refer test case](https://github.com/localstack/localstack/blob/master/tests/integration/test_sts.py)
@@ -27,7 +28,7 @@ awslocal sts \
     --saml-assertion "${TEST_SAML_ASSERTION}"
 ```
 
-## 3. AssumeRoleWithWebIdentity
+### 1.3 AssumeRoleWithWebIdentity
 
 ```sh
 # Returns a set of temporary security credentials for users who have been authenticated in a mobile or web application with a web identity provider (https://docs.aws.amazon.com/cli/latest/reference/sts/assume-role-with-web-identity.html)
@@ -41,7 +42,7 @@ awslocal sts \
     --web-identity-token "Atza%7CIQEBLjAsAhRFiXuWpUXuRvQ9PZL3GMFcYevydwIUFAHZwXZXXXXXXXXJnrulxKDHwy87oGKPznh0D6bEQZTSCzyoCtL_8S07pLpr0zMbn6w1lfVZKNTBdDansFBmtGnIsIapjI6xKR02Yc_2bQ8LZbUXSGm6Ry6_BG7PrtLZtj_dfCTj92xNGed-CrKqjG7nPBjNIL016GGvuS5gSvPRUxWES3VYfm1wl7WTI7jn-Pcb6M-buCgHhFOzTQxod27L9CqnOLio7N3gZAGpsp6n1-AJBOCJckcyXe2c6uD0srOJeZlKUm2eTDVMf8IehDVI0r1QOnTV6KzzAI3OY87Vd_cVMQ"
 ```
 
-## 4. GetCallerIdentity
+### 1.4 GetCallerIdentity
 
 ```sh
 # Returns details about the IAM user or role whose credentials are used to call the operation (https://docs.aws.amazon.com/cli/latest/reference/sts/get-caller-identity.html)
@@ -49,7 +50,7 @@ awslocal sts \
   get-caller-identity
 ```
 
-## 5. GetFederationToken
+### 1.5 GetFederationToken
 
 ```sh
 # Returns a set of temporary security credentials for a federated user (https://docs.aws.amazon.com/cli/latest/reference/sts/get-federation-token.html)
@@ -60,7 +61,7 @@ awslocal sts \
     --duration-seconds 3600
 ```
 
-## 6. GetSessionToken
+### 1.6 GetSessionToken
 
 ```sh
 # Returns a set of temporary credentials for an Amazon Web Services account or IAM user (https://docs.aws.amazon.com/cli/latest/reference/sts/get-session-token.html)
@@ -69,4 +70,26 @@ awslocal sts \
     --duration-seconds 900 \
     --serial-number "YourMFADeviceSerialNumber" \
     --token-code 123456
+```
+
+## 2. Using terraform
+
+- [Data Source: aws_caller_identity](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/caller_identity)
+
+### 2.1 GetCallerIdentity
+
+- get the access to the effective Account ID, User ID, and ARN in which Terraform is authorized
+
+```sh
+terraform init
+terraform validate
+terraform plan
+terraform apply -auto-approve
+terraform output
+```
+
+### 2.2 Delete terraform resources
+
+```sh
+terraform destroy -auto-approve
 ```
