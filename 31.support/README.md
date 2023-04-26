@@ -22,18 +22,12 @@ awslocal support \
 
 ```sh
 # Returns a list of cases that you specify by passing one or more case IDs (https://docs.aws.amazon.com/cli/latest/reference/support/describe-cases.html)
-awslocal support \
-  describe-cases \
-    --display-id "1234567890" \
-    --after-time "2020-03-23T21:31:47.774Z" \
-    --include-resolved-cases \
-    --language "en" \
-    --no-include-communications \
-    --max-item 1
+awslocal support describe-cases
 
-awslocal support \
+CASE_ID=$(awslocal support \
   describe-cases \
-    --case-id-list "case-12345678910-2020-KFEJCgiHJlA3IlEb"
+    --query 'cases[?subject==`Question about my account`].caseId' \
+    --output text)
 ```
 
 ## 3. DescribeTrustedAdvisorChecks
@@ -60,5 +54,5 @@ awslocal support \
 # Resolves a support case (https://docs.aws.amazon.com/cli/latest/reference/support/resolve-case.html)
 awslocal support \
   resolve-case \
-    --case-id "case-12345678910-2020-KFEJCgiHJlA3IlEb"
+    --case-id ${CASE_ID}
 ```
