@@ -10,12 +10,27 @@ usage:			## Show this help
 install:		## Install dependencies
 	@which awslocal || pip install awscli-local
 
-create:			## Registers a new domain
-	awslocal swf \
-		register-domain \
-		--name ${DOMAIN_NAME} \
-		--workflow-execution-retention-period-in-days 1 \
-		--description "Default domain for localstack"
+exist:			## Check if the domain exists
+	$(eval DEP_DOMAIN_NAME=$(shell awslocal swf \
+		list-domains \
+		--registration-status DEPRECATED \
+		--query 'domainInfos[?name==`'${DOMAIN_NAME}'`].name' \
+		--output text))
+
+create: exist			## Registers a new domain
+	if [ -z "${DEP_DOMAIN_NAME}" ]; then \
+		awslocal swf \
+			register-domain \
+			--name ${DOMAIN_NAME} \
+			--workflow-execution-retention-period-in-days 1 \
+			--description "Default domain for localstack"; \
+		echo "created domain ${DOMAIN_NAME}" ; \
+	else \
+		awslocal swf \
+			undeprecate-domain \
+			--name ${DOMAIN_NAME}; \
+		echo "undeprecated domain ${DOMAIN_NAME}" ; \
+	fi 
 
 list:			## list of domains registered in the account
 	awslocal swf \
