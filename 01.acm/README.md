@@ -24,7 +24,7 @@ awslocal acm list-certificates --max-items 10
 ### 1.3 Get certificate details
 
 ```sh
-CERT_ARN=$(awslocal acm list-certificates --query CertificateSummaryList[0].CertificateArn | sed 's/"//g')
+CERT_ARN=$(awslocal acm list-certificates --query CertificateSummaryList[0].CertificateArn --output text)
 
 # View the certificate details
 awslocal acm get-certificate --certificate-arn ${CERT_ARN}

@@ -25,7 +25,7 @@ create:		## Build, deploy, and invoke the Lambda function URL
 		--auth-type NONE
 
 run:		## Invoke the Lambda function URL
-	$(eval FUNC_URL=$(shell awslocal lambda get-function-url-config --function-name trending --query FunctionUrl | sed 's/"//g'))
+	$(eval FUNC_URL=$(shell awslocal lambda get-function-url-config --function-name trending --query FunctionUrl --output text))
 	curl -X GET $(FUNC_URL) | jq .
 
 clean:		## Remove python libraries and zip file, delete the Lambda function

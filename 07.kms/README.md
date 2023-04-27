@@ -16,7 +16,7 @@ awslocal kms create-key
 ```sh
 # list keys (https://docs.aws.amazon.com/cli/latest/reference/kms/list-keys.html)
 awslocal kms list-keys
-KEY_ID=$(awslocal kms list-keys --query "Keys[0].KeyId" | sed 's/"//g')
+KEY_ID=$(awslocal kms list-keys --query "Keys[0].KeyId" --output text)
 ```
 
 ### 1.3 Use the key now to encrypt something

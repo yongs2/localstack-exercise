@@ -17,7 +17,7 @@ list:		## List keys
 	awslocal kms list-keys
 
 key:		## get access key
-	$(eval KEY_ID=$(shell awslocal kms list-keys --query "Keys[0].KeyId" | sed 's/"//g'))
+	$(eval KEY_ID=$(shell awslocal kms list-keys --query "Keys[0].KeyId" --output text))
 
 encrypt: key	## Use the key now to encrypt something
 	awslocal kms encrypt \
@@ -34,7 +34,7 @@ decrypt: key	## Decrypt our file using the same KMS key
 		--query Plaintext \
 		| base64 -d
 
-clean: key	 	## Disable key
+clean: key	 ## Disable key
 	awslocal kms disable-key --key-id ${KEY_ID}
 	
 .PHONY: usage install create list key encrypt decrypt clean

@@ -17,7 +17,7 @@ def trending():
     data = {}
     repo_list = soup.find_all('article', attrs={'class':'Box-row'})
     for repo in repo_list:
-        full_repo_name = repo.find('h1').find('a').text.strip().split('/')
+        full_repo_name = repo.find('h2').find('a').text.strip().split('/')
         developer_name = full_repo_name[0].strip()
         repo_name = full_repo_name[1].strip()
         data[developer_name] = repo_name
@@ -62,7 +62,7 @@ awslocal lambda invoke --function-name trending output.log
 
 ```sh
 awslocal lambda create-function-url-config --function-name trending --auth-type NONE
-FUNC_URL=$(awslocal lambda get-function-url-config --function-name trending --query FunctionUrl | sed 's/"//g')
+FUNC_URL=$(awslocal lambda get-function-url-config --function-name trending --query FunctionUrl --output text)
 
 curl -X GET ${FUNC_URL} | jq
 ```
@@ -85,16 +85,7 @@ apk add zip && zip -r function.zip . -x '.terraform/*' '.terraform*' 'terraform.
 find . -mindepth 1 -maxdepth 1 -type d -exec rm -r {} +
 ```
 
-### 2.2 install tflocal
-
-```sh
-apk add python3
-curl https://bootstrap.pypa.io/get-pip.py -o /tmp/get-pip.py
-python /tmp/get-pip.py
-pip install terraform-local
-```
-
-### 2.3 create a new Lambda function
+### 2.2 create a new Lambda function
 
 ```tf
 resource "aws_lambda_function" "trending" {
@@ -107,7 +98,7 @@ resource "aws_lambda_function" "trending" {
 }
 ```
 
-### 2.4 create a Lambda Function URL
+### 2.3 create a Lambda Function URL
 
 ```tf
 resource "aws_lambda_function_url" "lambda_function_url" {
@@ -121,19 +112,19 @@ output "function_url" {
 }
 ```
 
-### 2.5 create a Lambda Function URL with Terraform
+### 2.4 create a Lambda Function URL with Terraform
 
 ```sh
-tflocal init
-tflocal plan
-tflocal apply -auto-approve
+terraform init
+terraform plan
+terraform apply -auto-approve
 
-FUNC_URL=$(tflocal output -json | jq -r .function_url.value)
+FUNC_URL=$(terraform output -raw function_url)
 curl -X GET ${FUNC_URL} | jq
 ```
 
 ### 2.6 delete resources
 
 ```sh
-tflocal destroy -auto-approve
+terraform destroy -auto-approve
 ```

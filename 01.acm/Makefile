@@ -18,7 +18,7 @@ list:		## List all certificates
 	awslocal acm list-certificates --max-items 10
 
 get_arn:	## get the certificate
-	$(eval CERT_ARN=$(shell awslocal acm list-certificates --query CertificateSummaryList[0].CertificateArn | sed 's/"//g'))
+	$(eval CERT_ARN=$(shell awslocal acm list-certificates --query CertificateSummaryList[0].CertificateArn --output text))
 
 view: get_arn	## view the certificate
 	awslocal acm get-certificate --certificate-arn ${CERT_ARN}

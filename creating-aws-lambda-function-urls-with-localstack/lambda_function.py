@@ -9,7 +9,7 @@ def trending():
     data = {}
     repo_list = soup.find_all('article', attrs={'class':'Box-row'})
     for repo in repo_list:
-        full_repo_name = repo.find('h1').find('a').text.strip().split('/')
+        full_repo_name = repo.find('h2').find('a').text.strip().split('/')
         developer_name = full_repo_name[0].strip()
         repo_name = full_repo_name[1].strip()
         data[developer_name] = repo_name
