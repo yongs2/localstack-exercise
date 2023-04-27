@@ -28,7 +28,7 @@ create:		## Creating Lambda layers locally
 	@echo "# List layers"
 	awslocal lambda list-layers
 
-arn:		## get lambda layer arn
+arn:		# get lambda layer arn
 	$(eval LAYER_VER_ARN=$(shell awslocal lambda list-layers --query 'Layers[?LayerName==`layer1`].LatestMatchingVersion.LayerVersionArn' --output text))
 
 func: arn	## Create the Lambda function
@@ -55,7 +55,7 @@ func: arn	## Create the Lambda function
 	@echo "# list functions"
 	awslocal lambda list-functions
 
-list:	## list layers and functions
+list:		## list layers and functions
 	awslocal lambda list-layers
 	awslocal lambda list-functions
 

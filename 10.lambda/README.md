@@ -15,6 +15,7 @@ def util():
 EOF
 (cd /tmp; zip -r testlayer.zip python)
 
+# FIXME: LocalStack Pro provides support for deploying Lambda layers locally
 # Creates an Lambda layer from a ZIP archive (https://docs.aws.amazon.com/cli/latest/reference/lambda/publish-layer-version.html)
 awslocal lambda publish-layer-version \
     --layer-name layer1 \
@@ -39,7 +40,7 @@ LAYER_VER_ARN=$(awslocal lambda list-layers --query 'Layers[?LayerName==`layer1`
 # create function zip file
 cat << EOF | tee /tmp/testlambda.py
 def handler(*args, **kwargs):
-  import testlayer; testlayer.util()
+  from layer1 import testlayer; testlayer.util()
   print("Debug output from Lambda function")
 EOF
 (cd /tmp; zip testlambda.zip testlambda.py)
