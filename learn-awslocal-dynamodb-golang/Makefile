@@ -22,7 +22,7 @@ env:		## Get Environment variables
 	@echo "AWS_ACCESS_KEY_ID	= ${AWS_ACCESS_KEY_ID}"
 	@echo "AWS_SECRET_ACCESS_KEY	= ${AWS_SECRET_ACCESS_KEY}"
 	@echo "AWS_DEFAULT_REGION	= ${AWS_DEFAULT_REGION}"
-	@echo "LOCALSTACK_ENDPOINT	= ${LOCALSTACK_ENDPOINT}"
+	@echo "AWS_ENDPOINT_URL	= ${AWS_ENDPOINT_URL}"
 
 run: env dep	## running application
 	go run main.go
